@@ -126,7 +126,7 @@ def configure_blueprints(app):
     app.register_blueprint(sa_bp)
     # 注册cb回调模块
     from app.flaskr.cb.view import cb_bp
-    app.register_blueprint(cb_bp)
+    app.register_blueprint(cb_bp, url_prefix='/api/cb')
 
 
 def configure_extensions(app):
