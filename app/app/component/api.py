@@ -222,13 +222,15 @@ def installation_track():
         ext = request.args.get('ext')
         url = request.url
         args = request.args.to_dict(request.args)
-        data = {"properties":args}
+        data = {"properties": args}
         # ip = '124.115.214.179' #测试西安bug
         # ip = '36.5.99.68' #测试安徽bug
-        if    'ip' in args and len(args['ip']) - len( args['ip'].replace('.','') ) == 3:#判断IP里是否存在IP地址
+        if 'ip' in args and len(args['ip']) - len( args['ip'].replace('.','') ) == 3:#判断IP里是否存在IP地址
             ip = args['ip']
+
+        # 获取SLB真实地址
         elif request.headers.get('X-Forwarded-For') is not None:
-            ip = request.headers.get('X-Forwarded-For') #获取SLB真实地址
+            ip = request.headers.get('X-Forwarded-For')
         else:
             ip = request.remote_addr#服务器直接暴露
         ip_city,ip_is_good = get_address(ip)
@@ -239,9 +241,9 @@ def installation_track():
             ip_asn = '{}'
         referrer = request.referrer[0:2047] if request.referrer else None
         try:
-            if 'properties' in data and 'is_offerwall' in    data['properties'] and data['properties']['is_offerwall']=='1':
+            if 'properties' in data and 'is_offerwall' in data['properties'] and data['properties']['is_offerwall'] == '1':
                 count_event,count_user,time_cost = insert_installation_track(project=project,data_decode=data,User_Agent=User_Agent,Host=Host,Connection=Connection,Pragma=Pragma, Cache_Control=Cache_Control, Accept=Accept, Accept_Encoding=Accept_Encoding, Accept_Language=Accept_Language, ip=ip, ip_city=ip_city,ip_asn=ip_asn, url=url, referrer=referrer, remark=remark, ua_platform=ua_platform, ua_browser=ua_browser, ua_version=ua_version, ua_language=ua_language, ip_is_good=ip_is_good, ip_asn_is_good=ip_asn_is_good)
-                if count_event and count_event>0 or count_user and count_user>0:
+                if count_event and count_event>0 or count_user and count_user > 0:
                     code = 0 #有米标准
                     msg = "success" #有米标准
                     result = 1 #七麦标准
@@ -267,7 +269,7 @@ def insert_installation_track(project, data_decode, User_Agent, Host, Connection
     start_time = time.time()
     timenow13 = int(round(time.time() * 1000))
     distinct_id = 'undefined'
-    track_id    = 0
+    track_id = 0
     dist_id_name = ['IDFA','androidid','android_id','IMEI','Idfa','Imei','imei','idfa']
     distinct_id = 'undefined'
     for i in dist_id_name:
@@ -296,8 +298,9 @@ def insert_installation_track(project, data_decode, User_Agent, Host, Connection
                 properties_key.append(keys)
             insert_properties(project=project,lib='ghost_sa',remark=remark,event='$AppChannelMatching',properties=json.dumps(properties_key),properties_len=len(data_decode['properties'].keys()),created_at=created_at if created_at else start_time,updated_at=created_at if created_at else start_time)
         print(time.time()-start_time)
+
     elif use_kafka is True:
-        msg = {"group":"installation_track","timestamp":timenow13,"data":{"project":project,"data_decode":data_decode,"User_Agent":User_Agent,"Host":Host,"Connection":Connection,"Pragma":Pragma,"Cache_Control":Cache_Control,"Accept":Accept,"Accept_Encoding":Accept_Encoding,"Accept_Language":Accept_Language,"ip":ip,"ip_city":ip_city,"ip_asn":ip_asn,"url":url,"referrer":referrer,"remark":remark,"ua_platform":ua_platform,"ua_browser":ua_browser,"ua_version":ua_version,"ua_language":ua_language,"ip_is_good":ip_is_good,"ip_asn_is_good":ip_asn_is_good,"created_at":created_at if created_at else start_time,"updated_at":created_at if created_at else start_time}}
+        msg = {"group": "installation_track", "timestamp": timenow13, "data":{ "project":project,"data_decode":data_decode,"User_Agent":User_Agent,"Host":Host,"Connection":Connection,"Pragma":Pragma,"Cache_Control":Cache_Control,"Accept":Accept,"Accept_Encoding":Accept_Encoding,"Accept_Language":Accept_Language,"ip":ip,"ip_city":ip_city,"ip_asn":ip_asn,"url":url,"referrer":referrer,"remark":remark,"ua_platform":ua_platform,"ua_browser":ua_browser,"ua_version":ua_version,"ua_language":ua_language,"ip_is_good":ip_is_good,"ip_asn_is_good":ip_asn_is_good,"created_at":created_at if created_at else start_time,"updated_at":created_at if created_at else start_time}}
         insert_message_to_kafka(msg=msg, key=distinct_id)
         print(time.time()-start_time)
 

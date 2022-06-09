@@ -124,6 +124,9 @@ def configure_blueprints(app):
     # 注册sa模块
     from app.flaskr.sa.view import sa_bp
     app.register_blueprint(sa_bp)
+    # 注册cb回调模块
+    from app.flaskr.cb.view import cb_bp
+    app.register_blueprint(cb_bp)
 
 
 def configure_extensions(app):
