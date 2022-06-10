@@ -8,7 +8,7 @@ from flask import Blueprint
 
 from app.flaskr.cb.bu import get_data
 
-cb_bp = Blueprint('cb', __name__)
+cb_bp = Blueprint('cb', __name__, url_prefix='/api/cb')
 
 
 @cb_bp.route('/adv_track', methods=('GET', 'POST'))
