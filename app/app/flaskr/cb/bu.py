@@ -137,8 +137,12 @@ def insert_data(request_data, event_name):
 
     # 广告主回调地址distinct_id使用ip填充
     distinct_id = data_decode.get('distinct_id', request_data.ip)
+
     # 广告回调事件
     event = data_decode.get('event', event_name)
+    if not event:
+        event = event_name
+
     # event类型
     type_ = data_decode.get('type')
 
