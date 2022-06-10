@@ -24,7 +24,7 @@ import time
 from flask import current_app, request, Response
 
 
-def get_data():
+def get_data(event_name):
     remark = request.args.get('remark', 'online')
     project = request.args.get('project', None)
 
@@ -122,11 +122,11 @@ def get_data():
     request_data.set_ua_properties(user_agent, ua_platform, ua_browser, ua_version, ua_language)
     request_data.set_ip_properties(ip, ip_city, ip_asn, ip_is_good, ip_asn_is_good)
 
-    insert_data(request_data)
+    insert_data(request_data, event_name=event_name)
     return Response(default_return_img, mimetype="image/gif")
 
 
-def insert_data(request_data):
+def insert_data(request_data, event_name):
     """保存数据.
     """
     start_time = time.time()
@@ -138,7 +138,7 @@ def insert_data(request_data):
     # 广告主回调地址distinct_id使用ip填充
     distinct_id = data_decode.get('distinct_id', request_data.ip)
     # 广告回调事件
-    event = data_decode.get('event', 'adv_track')
+    event = data_decode.get('event', event_name)
     # event类型
     type_ = data_decode.get('type')
 
