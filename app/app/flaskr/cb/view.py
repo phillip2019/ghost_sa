@@ -13,11 +13,11 @@ cb_bp = Blueprint('cb', __name__)
 
 @cb_bp.route('/ghost/api/cb/adv_click_track', methods=('GET', 'POST'))
 @cb_bp.route('/api/cb/adv_click_track', methods=('GET', 'POST'))
-def ad_track():
+def ad_click_track():
     return get_data('adv_click_track')
 
 
 @cb_bp.route('/ghost/api/cb/adv_expose_track', methods=('GET', 'POST'))
 @cb_bp.route('/api/cb/adv_expose_track', methods=('GET', 'POST'))
-def ad_track():
+def ad_expose_track():
     return get_data('adv_expose_track')
