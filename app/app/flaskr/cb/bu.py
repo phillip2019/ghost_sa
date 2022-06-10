@@ -8,11 +8,11 @@ import random
 
 from app.component.url_tools import get_post_datas
 from app.configs.code import ResponseCode
-from app.flaskr.sa.vo import RequestData
+from app.flaskr.cb.vo import RequestData
 from app.utils.geo import get_address, get_asn
 from app.utils.ip_util import check_ip
 from app.utils.kafka_op import insert_message_to_kafka
-from app.flaskr.sa.dao import insert_event, insert_or_update_device, insert_properties, insert_user
+from app.flaskr.cb.dao import insert_event, insert_or_update_device, insert_properties, insert_user
 from app.utils.response import res, default_return_img
 
 try:
@@ -98,7 +98,7 @@ def get_data(event_name):
     referrer = request.headers.get('Referer', '')
 
     args = request.args.to_dict(request.args)
-    data = {'properties': args}
+    data = {'properties': args, 'event': event_name}
     request_data = RequestData(project=project, remark=remark)
 
     # ip透传
@@ -122,11 +122,11 @@ def get_data(event_name):
     request_data.set_ua_properties(user_agent, ua_platform, ua_browser, ua_version, ua_language)
     request_data.set_ip_properties(ip, ip_city, ip_asn, ip_is_good, ip_asn_is_good)
 
-    insert_data(request_data, event_name=event_name)
+    insert_data(request_data)
     return Response(default_return_img, mimetype="image/gif")
 
 
-def insert_data(request_data, event_name):
+def insert_data(request_data):
     """保存数据.
     """
     start_time = time.time()
@@ -139,9 +139,7 @@ def insert_data(request_data, event_name):
     distinct_id = data_decode.get('distinct_id', request_data.ip)
 
     # 广告回调事件
-    event = data_decode.get('event', event_name)
-    if not event:
-        event = event_name
+    event = data_decode.get('event')
 
     # event类型
     type_ = data_decode.get('type')
