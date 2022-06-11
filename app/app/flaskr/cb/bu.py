@@ -137,9 +137,13 @@ def insert_data(request_data):
     data_decode = request_data.data
     # json_data_str = json.dumps(data_decode, ensure_ascii=False)
     track_id = data_decode.get('_track_id', random.randint(0, 900000000))
+    # 塞回track_id去
+    data_decode['_track_id'] = track_id
 
     # 广告主回调地址distinct_id使用ip填充
     distinct_id = data_decode.get('distinct_id', request_data.ip)
+    # 塞回distinct_id去
+    data_decode['distinct_id'] = distinct_id
 
     # 广告回调事件
     event = data_decode.get('event')
