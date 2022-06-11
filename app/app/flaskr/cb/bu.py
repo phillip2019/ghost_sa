@@ -165,6 +165,11 @@ def insert_data(request_data):
     properties['$utm_campaign'] = properties.get('utm_campaign', '')
     properties['$utm_content'] = properties.get('utm_content', '')
     properties['$utm_term'] = properties.get('utm_term', '')
+    properties['$latest_utm_source'] = properties.get('utm_source', '')
+    properties['$latest_utm_medium'] = properties.get('utm_medium', '')
+    properties['$latest_utm_campaign'] = properties.get('utm_campaign', '')
+    properties['$latest_utm_content'] = properties.get('utm_content', '')
+    properties['$latest_utm_term'] = properties.get('utm_term', '')
 
     # properties字段回写
     data_decode['properties'] = properties
