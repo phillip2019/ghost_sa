@@ -99,6 +99,7 @@ def get_data(event_name):
 
     args = request.args.to_dict(request.args)
     args['$url'] = url
+    args['$referrer'] = request.referrer
     data = {'properties': args, 'event': event_name}
     request_data = RequestData(project=project, remark=remark)
 
