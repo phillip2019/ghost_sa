@@ -98,6 +98,7 @@ def get_data(event_name):
     referrer = request.headers.get('Referer', '')
 
     args = request.args.to_dict(request.args)
+    args['$url'] = url
     data = {'properties': args, 'event': event_name}
     request_data = RequestData(project=project, remark=remark)
 
@@ -145,7 +146,9 @@ def insert_data(request_data):
     properties = data_decode.get('properties', {})
     # 将ts时间塞入time字段中
     ts = properties.get('ts')
-    if not ts or ts == '__TS__':
+    if ts:
+      ts = int(ts, 16)
+    elif not ts or ts == '__TS__':
         ts = time.time() * 1000
     data_decode['time'] = ts
     data_decode['_flush_time'] = ts
