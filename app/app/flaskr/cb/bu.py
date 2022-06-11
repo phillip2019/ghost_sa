@@ -141,6 +141,25 @@ def insert_data(request_data):
     # 广告回调事件
     event = data_decode.get('event')
 
+    # properties属性
+    properties = data_decode.get('properties', {})
+    # 将ts时间塞入time字段中
+    ts = properties.get('ts')
+    if not ts or ts == '__TS__':
+        ts = time.time() * 1000
+    data_decode['time'] = ts
+    data_decode['_flush_time'] = ts
+
+    # 广告字段回写
+    properties['$utm_source'] = properties.get('utm_source', '')
+    properties['$utm_medium'] = properties.get('utm_medium', '')
+    properties['$utm_campaign'] = properties.get('utm_campaign', '')
+    properties['$utm_content'] = properties.get('utm_content', '')
+    properties['$utm_term'] = properties.get('utm_term', '')
+
+    # properties字段回写
+    data_decode['properties'] = properties
+
     # event类型
     type_ = data_decode.get('type')
 
