@@ -119,7 +119,8 @@ def get_data(event_name):
                 ip_city, ip_is_good = get_address(user_ip)
                 ip_asn, ip_asn_is_good = get_asn(user_ip)
     request_data.data = data
-    request_data.set_connect_properties(connection, pragma, cache_control, accept, accept_encoding, accept_language=accept_language)
+    request_data.set_connect_properties(connection, pragma, cache_control, accept, accept_encoding,
+                                        accept_language=accept_language)
     request_data.set_url_properties(host, url, referrer=referrer)
     request_data.set_ua_properties(user_agent, ua_platform, ua_browser, ua_version, ua_language)
     request_data.set_ip_properties(ip, ip_city, ip_asn, ip_is_good, ip_asn_is_good)
@@ -148,7 +149,7 @@ def insert_data(request_data):
     # 将ts时间塞入time字段中
     ts = properties.get('ts')
     if ts:
-      ts = int(ts, 16)
+        ts = int(ts)
     elif not ts or ts == '__TS__':
         ts = time.time() * 1000
     data_decode['time'] = ts
@@ -228,4 +229,3 @@ def insert_data(request_data):
 
     cost_millisecond_time = time.time() - start_time
     current_app.logger.info(f'回调耗时{cost_millisecond_time}毫秒')
-
