@@ -340,7 +340,7 @@ class DefaultConfig(object):
     USE_USER = False  # True时，会插入properties表，这个表不是必须的，只是方便提取数据时快速找到埋点里包含的变量。
 
     # Kafka服务器的地址
-    BOOTSTRAP_SERVERS = ['172.18.5.17:9092', '172.18.5.15:9092', '172.18.5.16:9092']
+    BOOTSTRAP_SERVERS = ['172.18.5.17:9092', '172.18.5.15:9092', '172.18.5.16:9092', '172.18.5.6:9092', '172.18.5.9:9092']
 
     # Kafka群组地址，同一群组共享一个Offset，不会重复，也不会漏。
     CLIENT_GROUP_ID = 'your_group_id_here'
