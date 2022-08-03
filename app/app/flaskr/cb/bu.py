@@ -152,7 +152,7 @@ def insert_data(request_data):
     properties = data_decode.get('properties', {})
     # 将ts时间塞入time字段中
     ts = properties.get('ts')
-    if ts:
+    if ts and ts != '__TS__':
         ts = int(ts)
     elif not ts or ts == '__TS__':
         ts = time.time() * 1000
