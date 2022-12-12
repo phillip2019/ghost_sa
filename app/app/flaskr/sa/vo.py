@@ -253,8 +253,10 @@ class RequestData(object):
         properties_dict = self.data.get('properties', {})
         if 'properties' not in self.data:
             self.data['properties'] = properties_dict
-        properties_dict['$bot_name'] = bot_name
-        properties_dict['is_test'] = is_test
+        if bot_name:
+            properties_dict['$bot_name'] = bot_name
+        if is_test:
+            properties_dict['is_test'] = is_test
 
     def to_project_model(self):
         """将request_data转换成project_model
