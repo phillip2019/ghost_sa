@@ -18,6 +18,7 @@ class ProjectModel(db.Model):
     distinct_id = db.Column(db.String(64), primary_key=True)
     lib = db.Column(db.String(255))
     event = db.Column(db.String(255))
+    platform_type = db.Column(db.String(255))
     type_ = db.Column('type', db.String(255))
     all_json = db.Column(db.JSON())
     host = db.Column(db.String(255))

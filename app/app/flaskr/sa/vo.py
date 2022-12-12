@@ -269,6 +269,8 @@ class RequestData(object):
         project_model.lib = self.lib
         project_model.event = self.event
         project_model.type_ = self.type_
+        data_properties = self.data.get('properties')
+        project_model.platform_type = data_properties.get('platform_type')
         project_model.all_json = self.data
         project_model.host = self.host
         project_model.user_agent = self.user_agent
