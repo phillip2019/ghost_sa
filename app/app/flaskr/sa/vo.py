@@ -105,6 +105,9 @@ class RequestData(object):
         self.dt = dt
         self.hour = hour
 
+        self.bot_name = ''
+        self.is_test = False
+
     def set_ua_properties(self, user_agent, ua_platform, ua_browser, ua_version, ua_language):
         """设置ua属性.
         :param user_agent:
@@ -239,6 +242,19 @@ class RequestData(object):
         elif 'uid' in data_properties:
             self.user_id = data_properties.get('uid')
         self.all_user_profile = json.dumps(data_properties) if self.type_ == 'profile_set' else ''
+
+    def set_bot_properties(self, bot_name, is_test):
+        """设置机器人通用属性
+        :param bot_name 机器人名称
+        :param is_test 是否测试标识
+        """
+        self.bot_name = bot_name
+        self.is_test = is_test
+        properties_dict = self.data.get('properties', {})
+        if 'properties' not in self.data:
+            self.data['properties'] = properties_dict
+        properties_dict['$bot_name'] = bot_name
+        properties_dict['is_test'] = is_test
 
     def to_project_model(self):
         """将request_data转换成project_model
@@ -545,6 +561,7 @@ class RequestData(object):
             }
         }
         return kafka_msg
+
 
 
 

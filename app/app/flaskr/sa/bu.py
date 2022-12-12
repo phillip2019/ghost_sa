@@ -81,6 +81,12 @@ def get_data():
         # 服务器直接暴露
         ip = request.remote_addr
 
+    # bot_name cg_robot
+    # is_test true
+    # 若是模拟机刷流量，则加入机刷流量标识
+    bot_name = request.headers.get('bot_name')
+    is_test = request.headers.get('is_test')
+
     # 只获取第一条IP为ip_city信息，其它忽略
     first_ip = ip.split(', ')[0]
     ip_city, ip_is_good = get_address(first_ip)
@@ -111,6 +117,7 @@ def get_data():
         request_data.set_url_properties(host, url, referrer=referrer)
         request_data.set_ua_properties(user_agent, ua_platform, ua_browser, ua_version, ua_language)
         request_data.set_ip_properties(ip, ip_city, ip_asn, ip_is_good, ip_asn_is_good)
+        request_data.set_bot_properties(bot_name, is_test)
 
         insert_data(request_data)
     return Response(default_return_img, mimetype="image/gif")
