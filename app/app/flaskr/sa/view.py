@@ -4,7 +4,7 @@
     鬼策埋点上报模块.
 """
 
-from flask import Blueprint
+from flask import Blueprint, Response
 
 from app.configs.code import ResponseCode
 from app.flaskr.sa.bu import get_data
@@ -25,3 +25,15 @@ def register():
 @sa_bp.route('/')
 def index():
     return res(ResponseCode.SUCCEED)
+
+
+@sa_bp.route('/config/visualized/Web.conf')
+@sa_bp.route('/ghost/config/visualized/Web.conf')
+def visual_web():
+    mime_type = 'application/javascript'
+    content = '''saJSSDKVtrackCollectConfig(
+205, {});'''
+    return Response(content, mimetype=mime_type)
+    return
+
+
