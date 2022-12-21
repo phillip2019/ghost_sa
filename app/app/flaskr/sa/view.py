@@ -34,6 +34,5 @@ def visual_web():
     content = '''saJSSDKVtrackCollectConfig(
 205, {});'''
     return Response(content, mimetype=mime_type)
-    return
 
 
