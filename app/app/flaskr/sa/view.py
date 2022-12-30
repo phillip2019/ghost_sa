@@ -4,7 +4,7 @@
     鬼策埋点上报模块.
 """
 
-from flask import Blueprint, Response
+from flask import Blueprint, Response, jsonify
 
 from app.configs.code import ResponseCode
 from app.flaskr.sa.bu import get_data
@@ -36,3 +36,15 @@ def visual_web():
     return Response(content, mimetype=mime_type)
 
 
+@sa_bp.route('/config/Android.conf')
+@sa_bp.route('/ghost/config/Android.conf')
+def visual_android_web():
+    content = {"v": "v3", "configs": {"disableSDK": False, "disableDebugMode": False}}
+    return jsonify(content)
+
+
+@sa_bp.route('/config/iOS.conf')
+@sa_bp.route('/ghost/config/iOS.conf')
+def visual_ios_web():
+    content = {"v": "v2", "configs": {"disableSDK": False, "disableDebugMode": False}}
+    return jsonify(content)
