@@ -32,7 +32,11 @@ def index():
 def visual_web():
     mime_type = 'application/javascript'
     content = '''saJSSDKVtrackCollectConfig(
-205, {});'''
+205, {
+    event: {
+        unlimited_div: true
+    }
+});'''
     return Response(content, mimetype=mime_type)
 
 
