@@ -201,19 +201,22 @@ def insert_data(request_data):
             event = request_data.event
             if '$' not in event and event and event not in ('SearchButtonClick', 'SearchRequest', 'SearchResultClick'):
                 if event in ['top_resource_click', 'top_banner_view', 'top_banner_click', 'application_manager_click', 'mid_banner_click', 'mid_banner_view', 'bottom_find_goods_click', 'bottom_active_click', 'bottom_mine_click']:
-                    # 随机丢弃事件
-                    if random.randint(0, 9) > 5:
-                        # 去掉anonymous_id
-                        request_data.ip = ''
-                        request_data.ip_city = ''
-                        request_data.ip_asn = ''
-                        request_data.ip_asn_is_good = False
-                        request_data.track_id = ''
-                        request_data.platform_type = ''
-                        request_data.host = ''
-                        all_json = request_data.data
-                        request_data.data = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
-                        insert_yxg_event(request_data)
+                    try:
+                        # 随机丢弃事件
+                        if random.randint(0, 9) > 5:
+                            # 去掉anonymous_id
+                            request_data.ip = ''
+                            request_data.ip_city = ''
+                            request_data.ip_asn = ''
+                            request_data.ip_asn_is_good = False
+                            request_data.track_id = ''
+                            request_data.platform_type = ''
+                            request_data.host = ''
+                            all_json = request_data.data
+                            request_data.data = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
+                            insert_yxg_event(request_data)
+                    except Exception as e:
+                        pass
 
         msg = request_data.to_kafka_msg()
         insert_message_to_kafka(msg=msg, key=distinct_id)
