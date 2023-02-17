@@ -4,6 +4,7 @@
     业务逻辑模块
 """
 import math
+import random
 
 from app.component.url_tools import get_post_datas
 from app.configs.code import ResponseCode
@@ -193,6 +194,16 @@ def insert_data(request_data):
         # if admin.access_control_commit_mode =='none_kafka':
         #     ac_none_kafka.traffic(project=project,event=event,ip_commit=ip,distinct_id_commit=distinct_id,add_on_key_commit=data_decode['properties'][admin.access_control_add_on_key] if admin.access_control_add_on_key in data_decode['properties'] else None)
     else:
+        # 线上环境，同步写入一份到数据库中， 只写入foreigner_credit
+        # TODO 专门适配数字化发展改革部义信购埋点
+        if 'foreigner_credit' == request_data.project:
+            # 过滤内置事件
+            event = request_data.event
+            if '$' not in event:
+                # 随机丢弃事件
+                if random.randint(0, 9) > 5:
+                    insert_event(request_data)
+
         msg = request_data.to_kafka_msg()
         insert_message_to_kafka(msg=msg, key=distinct_id)
 
