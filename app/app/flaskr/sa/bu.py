@@ -3,6 +3,7 @@
 """
     业务逻辑模块
 """
+import logging
 import math
 import random
 
@@ -216,7 +217,7 @@ def insert_data(request_data):
                             request_data.data = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
                             insert_yxg_event(request_data)
                     except Exception as e:
-                        pass
+                        logging.error(f'存储义信购数据库错误，请查询日志消息', e)
 
         msg = request_data.to_kafka_msg()
         insert_message_to_kafka(msg=msg, key=distinct_id)
