@@ -199,7 +199,7 @@ def insert_data(request_data):
         if 'foreigner_credit' == request_data.project:
             # 过滤内置事件
             event = request_data.event
-            if '$' not in event:
+            if '$' not in event and event and event not in ('SearchButtonClick', 'SearchRequest', 'SearchResultClick'):
                 # 随机丢弃事件
                 if random.randint(0, 9) > 5:
                     # 去掉anonymous_id
