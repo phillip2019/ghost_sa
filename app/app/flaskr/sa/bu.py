@@ -202,6 +202,14 @@ def insert_data(request_data):
             if '$' not in event:
                 # 随机丢弃事件
                 if random.randint(0, 9) > 5:
+                    # 去掉anonymous_id
+                    request_data.ip = ''
+                    request_data.ip_city = ''
+                    request_data.ip_asn = ''
+                    request_data.ip_asn_is_good = False
+                    request_data.track_id = ''
+                    request_data.platform_type = ''
+                    request_data.host = ''
                     insert_event(request_data)
 
         msg = request_data.to_kafka_msg()
