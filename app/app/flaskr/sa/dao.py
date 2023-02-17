@@ -20,6 +20,16 @@ def insert_event(request_data):
     return 1
 
 
+def insert_yxg_event(request_data):
+    project_model = request_data.to_project_yxg_model()
+
+    db.session.add(project_model)
+    # 事务
+    db.session.commit()
+    current_app.logger.debug(f'插入事件数据成功， 数据为: {model_to_dict(project_model)}')
+    return 1
+
+
 def insert_or_update_device(request_data):
     request_data.set_other_properties()
     count = insert_device_db(request_data)

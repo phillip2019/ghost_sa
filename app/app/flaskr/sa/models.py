@@ -44,6 +44,35 @@ class ProjectModel(db.Model):
     hour = db.Column(db.Integer)
 
 
+class ProjectYxgModel(db.Model):
+    __abstract__ = True
+    __tablename__ = 'project'
+
+    distinct_id = db.Column(db.String(64), primary_key=True)
+    lib = db.Column(db.String(255))
+    event = db.Column(db.String(255))
+    type_ = db.Column('type', db.String(255))
+    all_json = db.Column(db.JSON())
+    host = db.Column(db.String(255))
+    user_agent = db.Column(db.String(2048))
+    ua_platform = db.Column(db.String(1024))
+    ua_browser = db.Column(db.String(1024))
+    ua_version = db.Column(db.String(1024))
+    ua_language = db.Column(db.String(1024))
+    connection = db.Column(db.String(255))
+    pragma = db.Column(db.String(255))
+    cache_control = db.Column(db.String(255))
+    accept = db.Column(db.String(255))
+    accept_encoding = db.Column(db.String(255))
+    accept_language = db.Column(db.String(255))
+    url = db.Column(db.Text())
+    referrer = db.Column(db.String(2048))
+    remark = db.Column(db.String(255))
+    created_at = db.Column(db.BigInteger)
+    date_ = db.Column('date', db.Date)
+    hour = db.Column(db.Integer)
+
+
 class ProjectDeviceModel(db.Model):
     __abstract__ = True
     __tablename__ = 'project_device'

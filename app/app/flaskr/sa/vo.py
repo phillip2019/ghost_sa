@@ -6,7 +6,8 @@
 import json
 import time
 
-from app.flaskr.sa.models import ProjectModel, ProjectDeviceModel, ProjectPropertiesModel, ProjectUserModel
+from app.flaskr.sa.models import ProjectModel, ProjectDeviceModel, ProjectPropertiesModel, ProjectUserModel, \
+    ProjectYxgModel
 from app.utils.database import NewDynamicModel
 
 
@@ -292,6 +293,39 @@ class RequestData(object):
         project_model.ip = self.ip
         project_model.ip_city = self.ip_city
         project_model.ip_asn = self.ip_asn
+        project_model.url = self.url
+        project_model.referrer = self.referrer
+        project_model.remark = self.remark
+        project_model.created_at = self.created_at
+        project_model.date_ = self.dt
+        project_model.hour = self.hour
+        return project_model
+
+    def to_project_yxg_model(self):
+        """将request_data转换成project_model
+        :return:
+        """
+        project_model = NewDynamicModel(ProjectYxgModel, f'{self.project}')
+        # from app.flaskr._tmp.projectmodel_to_chinagoods import ProjectModel_To_Chinagoods
+        # project_model = ProjectModel_To_Chinagoods()
+        # 动态变更表名
+        project_model.distinct_id = self.distinct_id
+        project_model.lib = self.lib
+        project_model.event = self.event
+        project_model.type_ = self.type_
+        project_model.all_json = self.data
+        project_model.host = self.host
+        project_model.user_agent = self.user_agent
+        project_model.ua_platform = self.ua_platform
+        project_model.ua_browser = self.ua_browser
+        project_model.ua_version = self.ua_version
+        project_model.ua_language = self.ua_language
+        project_model.connection = self.connection
+        project_model.pragma = self.pragma
+        project_model.cache_control = self.cache_control
+        project_model.accept = self.accept
+        project_model.accept_encoding = self.accept_encoding
+        project_model.accept_language = self.accept_language
         project_model.url = self.url
         project_model.referrer = self.referrer
         project_model.remark = self.remark
