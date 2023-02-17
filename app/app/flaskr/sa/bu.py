@@ -11,7 +11,7 @@ from app.configs.code import ResponseCode
 from app.flaskr.sa.vo import RequestData
 from app.utils.geo import get_address, get_asn
 from app.utils.kafka_op import insert_message_to_kafka
-from app.flaskr.sa.dao import insert_event, insert_or_update_device, insert_properties, insert_user
+from app.flaskr.sa.dao import insert_event, insert_or_update_device, insert_properties, insert_user, insert_yxg_event
 from app.utils.response import res, default_return_img
 
 try:
@@ -212,7 +212,7 @@ def insert_data(request_data):
                     request_data.host = ''
                     all_json = request_data.all_json
                     request_data.all_json = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id',)}
-                    insert_event(request_data)
+                    insert_yxg_event(request_data)
 
         msg = request_data.to_kafka_msg()
         insert_message_to_kafka(msg=msg, key=distinct_id)
