@@ -210,8 +210,8 @@ def insert_data(request_data):
                     request_data.track_id = ''
                     request_data.platform_type = ''
                     request_data.host = ''
-                    all_json = request_data.all_json
-                    request_data.all_json = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id',)}
+                    all_json = request_data.data
+                    request_data.data = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id',)}
                     insert_yxg_event(request_data)
 
         msg = request_data.to_kafka_msg()
