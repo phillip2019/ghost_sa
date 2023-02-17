@@ -204,7 +204,7 @@ def insert_data(request_data):
                 if event in ('top_resource_click', 'top_banner_view', 'top_banner_click', 'application_manager_click', 'mid_banner_click', 'mid_banner_view', 'bottom_find_goods_click', 'bottom_active_click', 'bottom_mine_click'):
                     try:
                         # 随机丢弃事件
-                        if random.randint(0, 9) > 5 or True:
+                        if random.randint(0, 9) > 5:
                             # 去掉anonymous_id
                             request_data.ip = ''
                             request_data.ip_city = ''
