@@ -214,7 +214,7 @@ def insert_data(request_data):
                             request_data.platform_type = ''
                             request_data.host = ''
                             all_json = request_data.data
-                            request_data.data = {k: v for (k, v) in all_json if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
+                            request_data.data = {k: v for (k, v) in all_json.items() if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
                             insert_yxg_event(request_data)
                     except Exception as e:
                         logging.error(f'存储义信购数据库错误，请查询日志消息', e)
