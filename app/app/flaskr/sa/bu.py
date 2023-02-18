@@ -195,6 +195,9 @@ def insert_data(request_data):
         # if admin.access_control_commit_mode =='none_kafka':
         #     ac_none_kafka.traffic(project=project,event=event,ip_commit=ip,distinct_id_commit=distinct_id,add_on_key_commit=data_decode['properties'][admin.access_control_add_on_key] if admin.access_control_add_on_key in data_decode['properties'] else None)
     else:
+        msg = request_data.to_kafka_msg()
+        insert_message_to_kafka(msg=msg, key=distinct_id)
+
         # 线上环境，同步写入一份到数据库中， 只写入foreigner_credit
         # TODO 专门适配数字化发展改革部义信购埋点
         if 'foreigner_credit' == request_data.project:
@@ -218,9 +221,6 @@ def insert_data(request_data):
                             insert_yxg_event(request_data)
                     except Exception as e:
                         logging.error(f'存储义信购数据库错误，请查询日志消息', e)
-
-        msg = request_data.to_kafka_msg()
-        insert_message_to_kafka(msg=msg, key=distinct_id)
 
     cost_millisecond_time = time.time() - start_time
     current_app.logger.info(f'耗时{cost_millisecond_time}毫秒')
