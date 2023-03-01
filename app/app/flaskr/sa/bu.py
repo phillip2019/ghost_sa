@@ -198,29 +198,29 @@ def insert_data(request_data):
         msg = request_data.to_kafka_msg()
         insert_message_to_kafka(msg=msg, key=distinct_id)
 
-        # 线上环境，同步写入一份到数据库中， 只写入foreigner_credit
-        # TODO 专门适配数字化发展改革部义信购埋点
-        if 'foreigner_credit' == request_data.project:
-            # 过滤内置事件
-            event = request_data.event
-            if '$' not in event and event and event not in ('SearchButtonClick', 'SearchRequest', 'SearchResultClick'):
-                if event in ('top_resource_click', 'top_banner_view', 'top_banner_click', 'application_manager_click', 'mid_banner_click', 'mid_banner_view', 'bottom_find_goods_click', 'bottom_active_click', 'bottom_mine_click'):
-                    try:
-                        # 随机丢弃事件
-                        if random.randint(0, 9) > 5:
-                            # 去掉anonymous_id
-                            request_data.ip = ''
-                            request_data.ip_city = ''
-                            request_data.ip_asn = ''
-                            request_data.ip_asn_is_good = False
-                            request_data.track_id = ''
-                            request_data.platform_type = ''
-                            request_data.host = ''
-                            all_json = request_data.data
-                            request_data.data = {k: v for (k, v) in all_json.items() if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
-                            insert_yxg_event(request_data)
-                    except Exception as e:
-                        logging.error(f'存储义信购数据库错误，请查询日志消息', e)
+        # # 线上环境，同步写入一份到数据库中， 只写入foreigner_credit
+        # # TODO 专门适配数字化发展改革部义信购埋点
+        # if 'foreigner_credit' == request_data.project:
+        #     # 过滤内置事件
+        #     event = request_data.event
+        #     if '$' not in event and event and event not in ('SearchButtonClick', 'SearchRequest', 'SearchResultClick'):
+        #         if event in ('top_resource_click', 'top_banner_view', 'top_banner_click', 'application_manager_click', 'mid_banner_click', 'mid_banner_view', 'bottom_find_goods_click', 'bottom_active_click', 'bottom_mine_click'):
+        #             try:
+        #                 # 随机丢弃事件
+        #                 if random.randint(0, 9) >= 7:
+        #                     # 去掉anonymous_id
+        #                     request_data.ip = ''
+        #                     request_data.ip_city = ''
+        #                     request_data.ip_asn = ''
+        #                     request_data.ip_asn_is_good = False
+        #                     request_data.track_id = ''
+        #                     request_data.platform_type = ''
+        #                     request_data.host = ''
+        #                     all_json = request_data.data
+        #                     request_data.data = {k: v for (k, v) in all_json.items() if k not in ('distinct_id', 'anonymous_id', '_track_id', 'identities', '_flush_time', 'anonymous_id')}
+        #                     insert_yxg_event(request_data)
+        #             except Exception as e:
+        #                 logging.error(f'存储义信购数据库错误，请查询日志消息', e)
 
     cost_millisecond_time = time.time() - start_time
     current_app.logger.info(f'耗时{cost_millisecond_time}毫秒')
