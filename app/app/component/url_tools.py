@@ -37,11 +37,12 @@ def get_post_datas():
 
     # 兼容content-type为application/json，但是数据内容为datas=xxx&crc=xxx，避免报错，抛出bad request
     json_data = None
+    err_msg = None
     try:
         if hasattr(request, 'json'):
             json_data = request.json
     except Exception as e:
-        current_app.logger.error(f'解析json格式错误， content_type: application/json，但是获取json异常， 错误为{e}')
+        err_msg = f'解析json格式错误， content_type: application/json，但是获取json异常， 错误为{e}'
 
     if json_data:
         request_data = json_data.get('data')
@@ -57,6 +58,7 @@ def get_post_datas():
         params = dict(urllib.parse.parse_qsl(play_load_str))
         request_data = params.get('data')
         request_datas = params.get('data_list')
+        err_msg = None
 
         if not gzip_flag:
             gzip_flag = params.get('gzip', 0)
@@ -68,6 +70,11 @@ def get_post_datas():
         params = dict(urllib.parse.parse_qsl(play_load_str))
         request_data = params.get('data')
         request_datas = params.get('datas') or params.get('data_list')
+        err_msg = None
+
+    if err_msg:
+        current_app.logger.error(err_msg)
+        err_msg = None
 
     request_source_data = request_data if request_data else request_datas
     current_app.logger.debug(f'请求数据为{request_source_data}')
