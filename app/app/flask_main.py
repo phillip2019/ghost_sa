@@ -399,6 +399,8 @@ def configure_logging(app):
     logging.Formatter.converter = custom_time_formatter
     # 根据时间分割日志文件
     logs_folder = os.path.join(app.root_path, os.pardir, 'logs', 'ghost', 'logs')
+    if not os.path.exists(logs_folder):
+        os.makedirs(logs_folder)
     app.logger = logging.getLogger(app.config["LOGGER_NAME"])
     debug_formatter = logging.Formatter(app.config['DEBUG_FORMATTER'])
     info_formatter = logging.Formatter(app.config['INFO_FORMATTER'])
