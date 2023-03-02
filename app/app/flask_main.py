@@ -399,35 +399,9 @@ def configure_logging(app):
     debug_formatter = logging.Formatter(app.config['DEBUG_FORMATTER'])
     info_formatter = logging.Formatter(app.config['INFO_FORMATTER'])
     error_formatter = logging.Formatter(app.config['ERROR_FORMATTER'])
-    from logstash_async.constants import constants
-    if 'index' not in constants.FORMATTER_LOGSTASH_MESSAGE_FIELD_LIST:
-        constants.FORMATTER_LOGSTASH_MESSAGE_FIELD_LIST.append('index')
-    logstash_formatter = FlaskLogstashFormatter(
-        message_type='python-logstash',
-        extra_prefix='sa',
-        extra=dict(application='chinagoods-bigdata-ghost_sa',
-                   environment='production',
-                   logstash_prefix='chinagoods-bigdata-ghost_sa'),
-        ensure_ascii=False,
-        metadata={"beat": "chinagoods-bigdata-ghost_sa"})
-
-    if app.config['LOG2ELK']:
-        transport = HttpTransport(host=app.config.get('ELK_HOST'),
-                                  port=app.config.get('ELK_PORT'),
-                                  timeout=5.0,
-                                  ssl_enable=False,
-                                  _use_logging=True)
-        stashHandler = AsynchronousLogstashHandler(host=app.config.get('ELK_HOST'),
-                                                   port=app.config.get('ELK_PORT'),
-                                                   database_path='logstash.db',
-                                                   transport=transport
-                                                )
-        # stashHandler = logstash.LogstashHandler(host=app.config.get('ELK_HOST'), port=app.config.get('ELK_PORT'), version=1)
-        stashHandler.setLevel(logging.INFO)
-        stashHandler.setFormatter(logstash_formatter)
-        app.logger.addHandler(stashHandler)
 
     import platform
+
     if "Linux" == platform.system():
         info_log = os.path.join(logs_folder, app.config['INFO_LOG'])
 
@@ -461,6 +435,12 @@ def configure_logging(app):
         # console_format = logging.Formatter(fmt=app.config['ERROR_FORMATTER'])
         # console_handler.setFormatter(fmt=console_format)
         # app.logger.addHandler(console_handler)
+    else:
+        # 控制台文件中输出相应的日志信息
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.DEBUG)
+        stream_handler.setFormatter(debug_formatter)
+        app.logger.addHandler(stream_handler)
 
     # 设置系统默认日志记录等级
     app.logger.setLevel(logging.INFO)
