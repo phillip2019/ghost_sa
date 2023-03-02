@@ -52,7 +52,7 @@ def get_post_datas():
                 gzip_flag = json_data.get('gzip', 0)
         elif json_data.startswith('data_list='):
             current_app.logger.info(f'请求原始内容为{json_data}')
-            request_datas = json_data[11:]
+            request_datas = json_data[10:]
         else:
             current_app.logger.error(f'json内容类型错误，json值为: {json_data}')
 
