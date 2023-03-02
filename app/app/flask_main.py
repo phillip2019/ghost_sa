@@ -411,13 +411,6 @@ def configure_logging(app):
         ensure_ascii=False,
         metadata={"beat": "chinagoods-bigdata-ghost_sa"})
 
-    # constants.FORMATTER_LOGSTASH_MESSAGE_FIELD_LIST =
-    # 控制台文件中输出相应的日志信息
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.DEBUG)
-    stream_handler.setFormatter(debug_formatter)
-    app.logger.addHandler(stream_handler)
-
     if app.config['LOG2ELK']:
         transport = HttpTransport(host=app.config.get('ELK_HOST'),
                                   port=app.config.get('ELK_PORT'),
