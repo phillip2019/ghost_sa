@@ -399,9 +399,10 @@ def configure_logging(app):
     debug_formatter = logging.Formatter(app.config['DEBUG_FORMATTER'])
     info_formatter = logging.Formatter(app.config['INFO_FORMATTER'])
     error_formatter = logging.Formatter(app.config['ERROR_FORMATTER'])
+    # 设置系统默认日志记录等级
+    app.logger.setLevel(logging.INFO)
 
     import platform
-
     if "Linux" == platform.system():
         info_log = os.path.join(logs_folder, app.config['INFO_LOG'])
 
@@ -428,22 +429,12 @@ def configure_logging(app):
         error_file_handler.suffix = app.config['BACKUP_SUFFIX']
         error_file_handler.setFormatter(error_formatter)
         app.logger.addHandler(error_file_handler)
-
-        # 线上环境输出错误日志到控制台
-        # console_handler = logging.StreamHandler()
-        # console_handler.setLevel(level="WARNING")
-        # console_format = logging.Formatter(fmt=app.config['ERROR_FORMATTER'])
-        # console_handler.setFormatter(fmt=console_format)
-        # app.logger.addHandler(console_handler)
     else:
         # 控制台文件中输出相应的日志信息
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(logging.DEBUG)
-        stream_handler.setFormatter(debug_formatter)
-        app.logger.addHandler(stream_handler)
-
-    # 设置系统默认日志记录等级
-    app.logger.setLevel(logging.INFO)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(debug_formatter)
+        app.logger.addHandler(console_handler)
 
     if app.config['SQLALCHEMY_ECHO']:
         # Ref: http://stackoverflow.com/a/842856
