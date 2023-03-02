@@ -395,17 +395,17 @@ def configure_logging(app):
     logging.Formatter.converter = custom_time_formatter
     # 根据时间分割日志文件
     logs_folder = os.path.join(app.root_path, os.pardir, "logs")
-    logging.getLogger(app.config["LOGGER_NAME"])
+    app.logger = logging.getLogger(app.config["LOGGER_NAME"])
     debug_formatter = logging.Formatter(app.config['DEBUG_FORMATTER'])
     info_formatter = logging.Formatter(app.config['INFO_FORMATTER'])
     error_formatter = logging.Formatter(app.config['ERROR_FORMATTER'])
     # 设置系统默认日志记录等级
     app.logger.setLevel(logging.INFO)
+    app.logger.propagate = False
 
     import platform
     if "Linux" == platform.system():
         info_log = os.path.join(logs_folder, app.config['INFO_LOG'])
-
         info_file_handler = logging.handlers.TimedRotatingFileHandler(
             filename=info_log,
             when=app.config['BACKUP_WHEN'],
@@ -418,7 +418,6 @@ def configure_logging(app):
         app.logger.addHandler(info_file_handler)
 
         error_log = os.path.join(logs_folder, app.config['ERROR_LOG'])
-
         error_file_handler = logging.handlers.TimedRotatingFileHandler(
             error_log,
             when=app.config['BACKUP_WHEN'],
