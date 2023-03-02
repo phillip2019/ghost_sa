@@ -463,11 +463,11 @@ def configure_logging(app):
         app.logger.addHandler(error_file_handler)
 
         # 线上环境输出错误日志到控制台
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(level="WARNING")
-        console_format = logging.Formatter(fmt=app.config['ERROR_FORMATTER'])
-        console_handler.setFormatter(fmt=console_format)
-        app.logger.addHandler(console_handler)
+        # console_handler = logging.StreamHandler()
+        # console_handler.setLevel(level="WARNING")
+        # console_format = logging.Formatter(fmt=app.config['ERROR_FORMATTER'])
+        # console_handler.setFormatter(fmt=console_format)
+        # app.logger.addHandler(console_handler)
 
     # 设置系统默认日志记录等级
     app.logger.setLevel(logging.INFO)
