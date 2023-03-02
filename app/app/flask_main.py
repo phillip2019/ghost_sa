@@ -318,6 +318,10 @@ def configure_teardown_handlers(app):
     #         # 超时50s关闭
     #         kafka_producer.close(timeout=50)
 
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db.session.remove()
+
 
 def configure_error_handlers(app):
     """
