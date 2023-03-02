@@ -45,11 +45,13 @@ def get_post_datas():
         err_msg = f'解析json格式错误， content_type: application/json，但是获取json异常， 错误为{e}'
 
     if json_data:
-        request_data = json_data.get('data')
-        request_datas = json_data.get('data_list')
-
-        if not gzip_flag:
-            gzip_flag = json_data.get('gzip', 0)
+        if hasattr(json_data, 'get'):
+            request_data = json_data.get('data')
+            request_datas = json_data.get('data_list')
+            if not gzip_flag:
+                gzip_flag = json_data.get('gzip', 0)
+        else:
+            current_app.logger.error(f'json内容类型错误，json值为: {json_data}')
 
     # 处理信标
     if 'text/plain' in request.headers.get('CONTENT-TYPE', ''):
