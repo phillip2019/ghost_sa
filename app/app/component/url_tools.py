@@ -83,6 +83,7 @@ def get_post_datas():
     request_source_data = request_data if request_data else request_datas
     current_app.logger.debug(f'请求数据为{request_source_data}')
 
+    de64 = None
     try:
         de64 = base64.b64decode(urllib.parse.unquote(request_source_data).encode('utf-8'))
         # request_target_data = json.loads(gzip.decompress(de64))
@@ -97,7 +98,7 @@ def get_post_datas():
             request_target_data = json.loads(gzip.decompress(de64))
         except Exception as e:
             current_app.logger.error(f'第二次尝试解码失败，原始数据为{de64}, 使用json.loads(gzip.decompress(de64))解码失败，开始异常为：{e}')
-        raise e
+            raise e
 
     # 结果封装成列表
     datas = [request_target_data] if request_data else request_target_data
