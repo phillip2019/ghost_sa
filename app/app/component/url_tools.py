@@ -94,7 +94,7 @@ def get_post_datas():
                 de64 = gzip.decompress(de64)
             request_target_data = json.loads(de64)
         except Exception as e:
-            current_app.logger.debug(f'请求参数为{request.url}, args: {request.args}, form: {request.form}, body: {request.data}, json: {request.json}')
+            current_app.logger.debug(f'请求参数为{request.url}, args: {request.args}, [form: {request.form}], body: {request.data}, json: {request.json}')
             current_app.logger.error(f'解码失败，原始数据为{request_source_data}, 使用base64.b64decode解码失败，开始异常为：{e}')
             current_app.logger.error(f'解码失败，原始数据为{de64}, 使用json.loads(de64)解码失败，开始异常为：{e}')
             try:
@@ -103,7 +103,7 @@ def get_post_datas():
                 current_app.logger.error(f'第二次尝试解码失败，原始数据为{de64}, 使用json.loads(gzip.decompress(de64))解码失败，开始异常为：{e}')
                 raise e
     else:
-        current_app.logger.error(f'待解码数据为None，原始请求为{request}')
+        current_app.logger.error(f'待解码数据为None，原始请求为{request}, args: [{request.args}], form: [{request.form}], body: [{request.body}]')
         raise Exception(f'待解码数据为None，请检查原始数据解析功能，修复此问题')
 
     # 结果封装成列表
