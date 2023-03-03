@@ -54,7 +54,7 @@ def insert_message_to_kafka(msg, key=None):
         current_app.kafka_producer = CreateKafkaProducer().create_producer(current_app)
     # TODO 将unicode编码格式数据，转换为中文编码
     msg_str = json.dumps(msg, ensure_ascii=False)
-    future = current_app.kafka_producer.send(topic=kafka_topic, key=key, value=msg_str.encode('utf-8', 'ignore'))
+    future = current_app.kafka_producer.send(topic=kafka_topic, key=key, value=msg_str.encode(encoding='utf-8', errors='xmlcharrefreplace'))
     result = future.get(timeout=10)
     current_app.logger.debug(f'往topic={kafka_topic}发送消息完成, 结果为{result}')
 
