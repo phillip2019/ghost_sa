@@ -103,17 +103,13 @@ def get_post_datas():
                 current_app.logger.error(f'第二次尝试解码失败，原始数据为{de64}, 使用json.loads(gzip.decompress(de64))解码失败，开始异常为：{e}')
                 raise e
     else:
-        request_body = None
-        request_json = None
         request_data = None
-        if hasattr(request, 'body'):
-            request_body = request.body
-        if hasattr(request, 'json'):
-            request_json = request.json
         if hasattr(request, 'data'):
             request_data = request.data.decode('utf-8')
-        current_app.logger.error(f'待解码数据为None，原始请求为{request}, args: [{request.args}], form: [{request.form}], body: [{request_body}], json: [{request_json}], data: [{request_data}]')
-        raise Exception(f'待解码数据为None，请检查原始数据解析功能，修复此问题')
+        current_app.logger.error(f'待解码数据为None，原始请求为{request}, args: [{request.args}], form: [{request.form}], data: [{request_data}]')
+        # 若存在数据，则抛出异常，否则不抛出异常
+        if request_data:
+            raise Exception(f'待解码数据为None，请检查原始数据解析功能，修复此问题')
 
     # 结果封装成列表
     datas = []
