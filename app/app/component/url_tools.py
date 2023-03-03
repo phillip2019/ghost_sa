@@ -4,6 +4,8 @@
 import base64
 import gzip
 
+from app.ep.custom_exception import SnifferException
+
 try:
     import simplejson as json
 except ImportError as _:
@@ -107,9 +109,11 @@ def get_post_datas():
         if hasattr(request, 'data'):
             request_data = request.data.decode('utf-8')
         current_app.logger.error(f'待解码数据为None，原始请求为{request}, args: [{request.args}], form: [{request.form}], data: [{request_data}]')
+
         # 若存在数据，则抛出异常，否则不抛出异常
         if request_data:
             raise Exception(f'待解码数据为None，请检查原始数据解析功能，修复此问题')
+        raise SnifferException('嗅探请求!')
 
     # 结果封装成列表
     datas = []

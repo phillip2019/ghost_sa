@@ -9,6 +9,7 @@ import random
 
 from app.component.url_tools import get_post_datas
 from app.configs.code import ResponseCode
+from app.ep.custom_exception import SnifferException
 from app.flaskr.sa.vo import RequestData
 from app.utils.geo import get_address, get_asn
 from app.utils.kafka_op import insert_message_to_kafka
@@ -95,7 +96,10 @@ def get_data():
     ip_asn, ip_asn_is_good = get_asn(first_ip)
     #: zh-CN,zh;q=0.9
     referrer = request.headers.get('Referer', '')
-    datas = get_post_datas()
+    try:
+        datas = get_post_datas()
+    except SnifferException as _:
+        return Response()
     request_data = RequestData(project=project, remark=remark)
 
     # ip透传
