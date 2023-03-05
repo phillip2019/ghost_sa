@@ -14,6 +14,4 @@ def check_ip(ip):
     :param ip: ip地址
     :return: True或False
     """
-    if compile_ip.match(ip):
-        return True
-    return False
+    return compile_ip.match(ip)

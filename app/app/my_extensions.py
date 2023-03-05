@@ -3,8 +3,10 @@
     app.extensions
 
 """
+import time
 from logging.handlers import SMTPHandler
 
+from cacheout import Cache
 from flask import json
 from flask_cors import CORS
 from flask_login import LoginManager
@@ -119,3 +121,5 @@ class NonASCIIJsonEncoder(json.JSONEncoder):
 #
 # # kafka_producer
 # kafka_producer = CreateKafkaProducer()
+cache = Cache(maxsize=512, ttl=300, timer=time.time, default=True)
+

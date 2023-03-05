@@ -7,9 +7,6 @@ import sys
 import time
 
 from flask import Flask
-from logstash_async.formatter import FlaskLogstashFormatter
-from logstash_async.handler import AsynchronousLogstashHandler
-from logstash_async.transport import HttpTransport
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import ProgrammingError
@@ -21,6 +18,7 @@ from app.utils.geo import GeoCityReader, GeoAsnReader
 from app.utils.response import res
 
 sys.path.append("..")
+sys.path.append("./")
 sys.setrecursionlimit(10000000)
 
 

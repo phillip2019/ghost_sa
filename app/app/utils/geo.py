@@ -6,6 +6,8 @@ import sys
 from flask import current_app, _app_ctx_stack
 from geoip2 import database as geoip2database
 
+from app.my_extensions import cache
+
 sys.path.append("../geoip/")
 sys.setrecursionlimit(10000000)
 
@@ -35,6 +37,7 @@ class GeoCityReader(object):
         if ctx is not None:
             if not hasattr(ctx, 'geo_city_reader'):
                 ctx.geo_city_reader = self.create_reader()
+                ctx.geo_city_black_ip_list = dict()
             return ctx.geo_city_reader
 
 
@@ -66,6 +69,7 @@ class GeoAsnReader(object):
             return ctx.geo_asn_reader
 
 
+@cache.memoize()
 def get_address(ip='8.8.8.8'):
     """使用geo2接口，获取ip对应地址信息.
     若获取失败，则返回相应空值{}，避免报错，丢失数据
@@ -82,6 +86,7 @@ def get_address(ip='8.8.8.8'):
     return raw_json, ret_code
 
 
+@cache.memoize()
 def get_asn(ip='8.8.8.8'):
     """使用geo2接口，获取asn对应地址信息.
         :param ip: ip
