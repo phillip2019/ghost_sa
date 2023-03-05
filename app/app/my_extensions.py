@@ -121,5 +121,5 @@ class NonASCIIJsonEncoder(json.JSONEncoder):
 #
 # # kafka_producer
 # kafka_producer = CreateKafkaProducer()
-cache = LRUCache(maxsize=512, ttl=300, timer=time.time, default=True)
+cache = LRUCache(maxsize=10240, ttl=300, timer=time.time, default=True)
 
